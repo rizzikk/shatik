@@ -9,20 +9,20 @@ class Player:
 
     def gather(self, item):
         self.inventory.append(item)
-        print("Вы собрали: {item}.")
+        print(f"Вы собрали: {item}.")
 
     def has_materials(self, materials):
-        #Проверяет наличие необходимых материалов в инвентаре.
+        # Проверяет наличие необходимых матов в инвентаре.
         return all(self.inventory.count(item) >= count for item, count in materials.items())
 
     def remove_materials(self, materials):
-        #Удаляет использованные материалы из инвентаря.
+        # Удаляет использованные маты из инвентаря.
         for item, count in materials.items():
             for _ in range(count):
                 self.inventory.remove(item)
 
     def craft_tool(self):
-        #Создает инструмент на основе выбора игрока.
+        # Создает инструмент
         print("Доступные инструменты для создания:")
         print("1. Топор (2 дерева, 1 камень, 1 веревка)")
         print("2. Молоток (2 дерева, 2 камня, 1 веревка)")
@@ -61,22 +61,23 @@ class Player:
             print("Неверный выбор инструмента.")
 
     def build_shelter(self):
-        #Строит укрытие с использованием выбранного инструмента.
-        if not self.shelter_built and self.has_materials({'дерево': 1, 'камень': 1, 'ветка': 2, 'листья': 3}):
+        # Строит укрытие
+        if not self.shelter_built:
             if self.tool is None:
                 print("Для постройки укрытия вам нужен инструмент!")
                 return
-
-            print("Вы построили укрытие с помощью {self.tool}!")
-            self.shelter_built = True
-            self.remove_materials({'дерево': 1, 'камень': 1, 'ветка': 2, 'листья': 3})
-        elif self.shelter_built:
-            print("Укрытие уже построено.")
+            
+            if self.has_materials({'дерево': 1, 'камень': 1, 'ветка': 2, 'листья': 3}):
+                print(f"Вы построили укрытие с помощью {self.tool}!")
+                self.shelter_built = True
+                self.remove_materials({'дерево': 1, 'камень': 1, 'ветка': 2, 'листья': 3})
+            else:
+                print("Недостаточно материалов для постройки укрытия.")
         else:
-            print("Недостаточно материалов для постройки укрытия.")
+            print("Укрытие уже построено.")
 
     def build_hut(self):
-        #Строит хижину с использованием необходимых материалов и инструмента.
+        # Строит хижину
         materials = {'дерево': 10, 'камень': 5, 'веревка': 2}
         
         if not self.has_materials(materials):
@@ -87,22 +88,22 @@ class Player:
             print("Для постройки хижины вам нужен молоток или топор!")
             return
         
-        print("Вы построили хижину с помощью {self.tool}!")
+        print(f"Вы построили хижину с помощью {self.tool}!")
         self.remove_materials(materials)
 
     def attack(self, damage):
-        #Атака животного.
-        print("Вы атаковали животное и нанесли {damage} урона!")
+        # Атака животного
+        print(f"Вы атаковали животное и нанесли {damage} урона!")
 
     def take_damage(self, damage):
-        #Получение урона.
+        # Получение урона
         self.health -= damage
-        print("Вы получили {damage} урона! Ваше здоровье: {self.health}")
+        print(f"Вы получили {damage} урона! Ваше здоровье: {self.health}")
 
     def explore_forest(self):
-        #Разведка леса с шансом найти ящики или припасы.
-        find_box_chance = random.random() < 0.3  # 30% шанс найти ящик
-        find_supplies_chance = random.random() < 0.5  # 50% шанс найти припасы
+        # Разведка леса
+        find_box_chance = random.random() < 0.3  # 30% 
+        find_supplies_chance = random.random() < 0.5  # 50% 
 
         if find_box_chance:
             print("Вы нашли ящик! Открываете его...")
@@ -116,9 +117,9 @@ class Player:
             self.gather(found_supply)
 
     def gather_leaves_and_sticks(self):
-        #Собирает листья и ветки."""
-        leaves_count = random.randint(1, 3)   # Случайное количество листьев
-        sticks_count = random.randint(1, 3)    # Случайное количество веток
+        # Собирает листья и ветки.
+        leaves_count = random.randint(1, 3)  
+        sticks_count = random.randint(1, 3) 
         for _ in range(leaves_count):
             self.gather('листья')
         
@@ -126,15 +127,15 @@ class Player:
             self.gather('ветка')
 
 def show_inventory(player):
-    #Отображает инвентарь игрока.
+    # Отображает инвентарь игрока.
     if player.inventory:
         print("В вашем инвентаре:", ', '.join(player.inventory))
     else:
         print("Ваш инвентарь пуст.")
 
 def show_status(player):
-    #Отображает текущее состояние игрока.
-    print("Ваше здоровье: {player.health}")
+    #состояние игрока.
+    print(f"Ваше здоровье: {player.health}")
     show_inventory(player)
 
 def animal_attack(player):
@@ -170,7 +171,7 @@ def animal_attack(player):
     return True
 
 def forest_scene(player):
-    #Сцена в лесу с действиями игрока.
+    #действиями игрока.
     show_status(player)  
     print("Вы находитесь в лесу. Что вы хотите сделать?")
     print("1. Собрать дерево")
@@ -208,7 +209,7 @@ def forest_scene(player):
         return animal_attack(player)
 
 def introduction():
-    #Вводная часть игры.
+    # Сюжет
     print("Вы опытный путешественник, который отправился в поход по живописным лесам.")
     print("Однако во время одного из своих походов вы потерялись.")
     print("Непогода застала вас врасплох, и вы сбились с пути.")
